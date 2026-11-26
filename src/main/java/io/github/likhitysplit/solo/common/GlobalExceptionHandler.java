@@ -1,0 +1,30 @@
+package io.github.likhitysplit.solo.common;
+
+import io.github.likhitysplit.solo.task.AnchorLimitExceededException;
+import io.github.likhitysplit.solo.user.UserNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AnchorLimitExceededException.class)
+    public ProblemDetail handleAnchorLimit(AnchorLimitExceededException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT, ex.getMessage());
+        problem.setTitle("anchor limit reached");
+        return problem;
+    }
+
+    // Write the second handler yourself:
+    // UserNotFoundException → 404 NOT_FOUND, title "User not found"
+    @ExceptionHandler(UserNotFoundException.class)
+    public ProblemDetail handleUserNotFound(UserNotFoundException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND, ex.getMessage());
+        problem.setTitle("user not found");
+        return problem;
+    }
+}

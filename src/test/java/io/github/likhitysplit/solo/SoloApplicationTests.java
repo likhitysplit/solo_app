@@ -1,13 +1,33 @@
-package io.github.likhitysplit.solo;
+package io.github.likhitysplit.solo.user;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class SoloApplicationTests {
+@ActiveProfiles("local")
+@Transactional
+class UserRepositoryTest {
+
+	@Autowired
+	private UserRepository users;
 
 	@Test
-	void contextLoads() {
-	}
+	void savesAndFindsUser() {
+		User user = new User("likhi", "likhi@example.com", "test-hash", "America/New_York");
 
+		User saved = users.save(user);
+
+		assertThat(saved.getId()).isNotNull();
+
+		User found = users.findByEmail("likhi@example.com").orElseThrow();
+		assertThat(found.getUsername()).isEqualTo("likhi");
+		assertThat(found).isSameAs(saved);
+
+		assertThat(users.existsByUsername("likhi")).isTrue();
+	}
 }

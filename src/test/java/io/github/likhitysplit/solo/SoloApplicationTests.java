@@ -1,5 +1,7 @@
-package io.github.likhitysplit.solo.user;
+package io.github.likhitysplit.solo;
 
+import io.github.likhitysplit.solo.user.User;
+import io.github.likhitysplit.solo.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,5 +1,6 @@
 package io.github.likhitysplit.solo.common;
 
+import io.github.likhitysplit.solo.auth.AccountConflictException;
 import io.github.likhitysplit.solo.focus.FocusConflictException;
 import io.github.likhitysplit.solo.focus.FocusSessionNotFoundException;
 import io.github.likhitysplit.solo.task.AnchorLimitExceededException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.naming.AuthenticationException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -84,6 +86,20 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST, String.join(" · ", errors.values()));
         problem.setTitle("Invalid input");
         problem.setProperty("errors", errors);
+        return problem;
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ProblemDetail handleAuthentication(AuthenticationException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        problem.setTitle("Invalid email or password");
+        return problem;
+    }
+
+    @ExceptionHandler(AccountConflictException.class)
+    public ProblemDetail handleAccountConflict(AccountConflictException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        problem.setTitle("Account conflict");
         return problem;
     }
 }

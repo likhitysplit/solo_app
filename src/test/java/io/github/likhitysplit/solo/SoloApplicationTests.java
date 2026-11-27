@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("local")
 @Transactional
-class UserRepositoryTest {
+class SoloApplicationTests {
 
 	@Autowired
 	private UserRepository users;

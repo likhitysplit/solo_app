@@ -61,7 +61,7 @@ public class Task {
 
     public void complete(Instant now) {
         if (this.status == TaskStatus.COMPLETED) {
-            throw new IllegalStateException("task " + id + " is already completed");
+            throw new TaskAlreadyCompletedException(id);
         }
         this.status = TaskStatus.COMPLETED;
         this.completedAt = now;

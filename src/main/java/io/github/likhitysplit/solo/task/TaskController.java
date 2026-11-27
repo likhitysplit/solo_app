@@ -1,5 +1,6 @@
 package io.github.likhitysplit.solo.task;
 
+import io.github.likhitysplit.solo.task.dto.CompleteTaskResponse;
 import io.github.likhitysplit.solo.task.dto.CreateTaskRequest;
 import io.github.likhitysplit.solo.task.dto.TaskResponse;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,5 +40,11 @@ public class TaskController {
             result.add(TaskResponse.from(t));
         }
         return result;
+    }
+
+    @PostMapping("/{taskId}/complete")
+    public CompleteTaskResponse complete(@PathVariable Long userId,
+                                         @PathVariable Long taskId) {
+        return CompleteTaskResponse.from(taskService.completeTask(userId, taskId));
     }
 }

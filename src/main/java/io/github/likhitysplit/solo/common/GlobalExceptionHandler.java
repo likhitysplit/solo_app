@@ -1,6 +1,8 @@
 package io.github.likhitysplit.solo.common;
 
 import io.github.likhitysplit.solo.task.AnchorLimitExceededException;
+import io.github.likhitysplit.solo.task.TaskAlreadyCompletedException;
+import io.github.likhitysplit.solo.task.TaskNotFoundException;
 import io.github.likhitysplit.solo.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -18,13 +20,27 @@ public class GlobalExceptionHandler {
         return problem;
     }
 
-    // Write the second handler yourself:
-    // UserNotFoundException → 404 NOT_FOUND, title "User not found"
     @ExceptionHandler(UserNotFoundException.class)
     public ProblemDetail handleUserNotFound(UserNotFoundException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.NOT_FOUND, ex.getMessage());
         problem.setTitle("user not found");
+        return problem;
+    }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ProblemDetail handleTaskNotFound(TaskNotFoundException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND, ex.getMessage());
+        problem.setTitle("task not found");
+        return problem;
+    }
+
+    @ExceptionHandler(TaskAlreadyCompletedException.class)
+    public ProblemDetail handleTaskAlreadyCompleted(TaskAlreadyCompletedException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT, ex.getMessage());
+        problem.setTitle("task already completed");
         return problem;
     }
 }

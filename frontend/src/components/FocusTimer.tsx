@@ -3,7 +3,6 @@ import type { FocusSession, StatProgress, Task } from '../types';
 import { finishFocus, getActiveFocus, startFocus } from '../api';
 
 type Props = {
-  userId: number;
   openTasks: Task[];
   onStatUpdated: (stat: StatProgress) => void;
   onMessage: (message: string) => void;
@@ -18,17 +17,17 @@ function formatClock(ms: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function FocusTimer({ userId, openTasks, onStatUpdated, onMessage }: Props) {
+export function FocusTimer({openTasks, onStatUpdated, onMessage }: Props) {
   const [active, setActive] = useState<FocusSession | null>(null);
   const [taskId, setTaskId] = useState<number | ''>('');
   const [minutes, setMinutes] = useState(25);
   const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
-    getActiveFocus(userId)
+    getActiveFocus()
       .then(setActive)
       .catch((err) => onMessage(err.message));
-  }, [userId]);
+  });
 
   useEffect(() => {
     if (!active) return;
@@ -38,7 +37,7 @@ export function FocusTimer({ userId, openTasks, onStatUpdated, onMessage }: Prop
 
   async function handleStart() {
     try {
-      const session = await startFocus(userId, taskId === '' ? null : taskId, minutes);
+      const session = await startFocus(taskId === '' ? null : taskId, minutes);
       setNow(Date.now());
       setActive(session);
       onMessage('Focus started. You got this.');
@@ -50,7 +49,7 @@ export function FocusTimer({ userId, openTasks, onStatUpdated, onMessage }: Prop
   async function handleFinish() {
     if (!active) return;
     try {
-      const result = await finishFocus(userId, active.id);
+      const result = await finishFocus(active.id);
       setActive(null);
       if (result.stat) {
         onStatUpdated(result.stat);

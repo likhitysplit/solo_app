@@ -1,15 +1,17 @@
 package io.github.likhitysplit.solo.finance;
 
+import io.github.likhitysplit.solo.auth.AppUserPrincipal;
 import io.github.likhitysplit.solo.finance.dto.CreateExpenseRequest;
 import io.github.likhitysplit.solo.finance.dto.ExpenseResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users/{userId}/expenses")
+@RequestMapping("/api/expenses")
 public class ExpenseController {
 
     private final ExpenseService expenseService;
@@ -19,13 +21,13 @@ public class ExpenseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ExpenseResponse create(@PathVariable Long userId, @Valid @RequestBody CreateExpenseRequest req) {
-        return ExpenseResponse.from(expenseService.createExpense(userId, req.amountCents(),
+    public ExpenseResponse create(@AuthenticationPrincipal AppUserPrincipal me, @Valid @RequestBody CreateExpenseRequest req) {
+        return ExpenseResponse.from(expenseService.createExpense(me.id(), req.amountCents(),
                 req.merchant(), req.category(), req.spentOn(), req.note()));
     }
 
     @GetMapping
-    public List<ExpenseResponse> recent(@PathVariable Long userId) {
-        return expenseService.getRecent(userId).stream().map(ExpenseResponse::from).toList();
+    public List<ExpenseResponse> recent(@AuthenticationPrincipal AppUserPrincipal me) {
+        return expenseService.getRecent(me.id()).stream().map(ExpenseResponse::from).toList();
     }
 }

@@ -104,3 +104,15 @@ export type CreateExpenseRequest = {
   spentOn: string;
   note: string | null;
 };
+
+export type Me = {
+  id: number;
+  username: string;
+  email: string;
+  timezone: string;
+};
+
+type Props = {
+  me: Me;
+  onLoggedOut: () => void;
+};

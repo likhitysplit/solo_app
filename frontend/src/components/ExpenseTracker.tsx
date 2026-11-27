@@ -7,11 +7,10 @@ import { dollarsToCents, formatCents } from '../utils/money';
 import { todayLocal } from '../utils/date';
 
 type Props = {
-  userId: number;
   onMessage: (message: string) => void;
 };
 
-export function ExpenseTracker({ userId, onMessage }: Props) {
+export function ExpenseTracker({onMessage }: Props) {
   const [expenses, setExpenses] = useState<Expense[]>([]);
 
   const [amount, setAmount] = useState('');
@@ -21,10 +20,10 @@ export function ExpenseTracker({ userId, onMessage }: Props) {
   const [note, setNote] = useState('');
 
   useEffect(() => {
-    getExpenses(userId)
+    getExpenses()
       .then(setExpenses)
       .catch((err) => onMessage(err.message));
-  }, [userId]);
+  });
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -36,7 +35,7 @@ export function ExpenseTracker({ userId, onMessage }: Props) {
     }
 
     try {
-      const saved = await createExpense(userId, {
+      const saved = await createExpense({
         amountCents,
         merchant,
         category,

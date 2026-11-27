@@ -5,13 +5,12 @@ import type { Stat, Task, TaskType } from '../types';
 import { createTask } from '../api';
 
 type Props = {
-  userId: number;
   date: string;
   onCreated: (task: Task) => void;
   onError: (message: string) => void;
 };
 
-export function AddTaskForm({ userId, date, onCreated, onError }: Props) {
+export function AddTaskForm({date, onCreated, onError }: Props) {
   const [title, setTitle] = useState('');
   const [type, setType] = useState<TaskType>('ANCHOR');
   const [stat, setStat] = useState<Stat>('DILIGENCE');
@@ -26,7 +25,7 @@ export function AddTaskForm({ userId, date, onCreated, onError }: Props) {
     }
     setSaving(true);
     try {
-      const task = await createTask(userId, { title: title.trim(), type, stat, baseXp, date });
+      const task = await createTask({ title: title.trim(), type, stat, baseXp, date });
       onCreated(task);
       setTitle('');                             
     } catch (err) {

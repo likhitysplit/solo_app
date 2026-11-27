@@ -5,25 +5,24 @@ import type { LogEntry, Stat } from '../types';
 import { createLog, getLogs } from '../api';
 
 type Props = {
-  userId: number;
   onMessage: (message: string) => void;
 };
 
-export function SoloLog({ userId, onMessage }: Props) {
+export function SoloLog({onMessage }: Props) {
   const [entries, setEntries] = useState<LogEntry[]>([]);
   const [content, setContent] = useState('');
   const [tag, setTag] = useState<Stat | ''>('');         
 
   useEffect(() => {
-    getLogs(userId)
+    getLogs()
       .then(setEntries)
       .catch((err) => onMessage(err.message));
-  }, [userId]);                                            
+  });                                            
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     try {
-      const entry = await createLog(userId, content, tag === '' ? null : tag);
+      const entry = await createLog(content, tag === '' ? null : tag);
       setEntries((prev) => [entry, ...prev]);        
       setContent('');
       setTag('');

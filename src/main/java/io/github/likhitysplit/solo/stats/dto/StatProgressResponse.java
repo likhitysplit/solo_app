@@ -11,14 +11,18 @@ public record StatProgressResponse(
         int xpIntoLevel,
         int xpToNextLevel
 ) {
-    public static StatProgressResponse from(StatProgress p) {
-        int level = p.level();
+    public static StatProgressResponse of(Stat stat, int totalXp) {
+        int level = LevelCurve.levelFor(totalXp);
         return new StatProgressResponse(
-                p.getStat(),
-                p.getTotalXp(),
+                stat,
+                totalXp,
                 level,
-                LevelCurve.xpIntoLevel(p.getTotalXp()),
+                LevelCurve.xpIntoLevel(totalXp),
                 LevelCurve.xpToAdvanceFrom(level)
         );
+    }
+
+    public static StatProgressResponse from(StatProgress p) {
+        return of(p.getStat(), p.getTotalXp());
     }
 }

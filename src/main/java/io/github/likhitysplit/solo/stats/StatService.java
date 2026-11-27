@@ -6,6 +6,9 @@ import io.github.likhitysplit.solo.user.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 @Service
 public class StatService {
     private final StatProgressRepository statProgress;
@@ -28,5 +31,21 @@ public class StatService {
         User user = users.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         return statProgress.save(new StatProgress(user, stat));
+    }
+
+    @Transactional(readOnly = true)
+    public Map<Stat, Integer> getTotalXpByStat(Long userId) {
+        if (!users.existsById(userId)) {
+            throw new UserNotFoundException(userId);
+        }
+
+        Map<Stat, Integer> result = new EnumMap<>(Stat.class);
+        for (Stat stat : Stat.values()) {
+            result.put(stat, 0);
+        }
+        for (StatProgress p : statProgress.findByUserId(userId)) {
+            result.put(p.getStat(), p.getTotalXp());
+        }
+        return result;
     }
 }

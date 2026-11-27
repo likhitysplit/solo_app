@@ -13,3 +13,17 @@ export type Task = {
     originalDate: string;
     completedAt: string | null;
 };
+
+export type StatProgress = {
+  stat: Stat;
+  totalXp: number;
+  level: number;
+  xpIntoLevel: number;
+  xpToNextLevel: number;
+};
+
+export type CompleteTaskResponse = {
+  task: Task;
+  stat: StatProgress;
+  xpGained: number;
+};

@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import type { Task } from './types';
+import type { StatProgress, Task } from './types';
+import { completeTask, getStats, getTasks } from './api';
+import { StatBar } from './components/StatBar';
+import { TaskItem } from './components/TaskItem';
 
 const USER_ID = 15;
 
@@ -9,30 +12,46 @@ function todayLocal(): string {
 
 export default function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState<StatProgress[]>([]);
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`/api/users/${USER_ID}/tasks?date=${todayLocal()}`)
-        .then((res) => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          return res.json();
-        })
-        .then((data: Task[]) => setTasks(data))
-        .catch((err) => setError(err.message));
+    Promise.all([getTasks(USER_ID, todayLocal()), getStats(USER_ID)])
+      .then(([loadedTasks, loadedStats]) => {
+        setTasks(loadedTasks);
+        setStats(loadedStats);
+      })
+      .catch((err) => setMessage(err.message));
   }, []);
 
-  if (error) return <p>Error: {error}</p>;
+  async function handleComplete(taskId: number) {
+    try {
+      const result = await completeTask(USER_ID, taskId);
+
+      setTasks((prev) => prev.map((t) => (t.id === result.task.id ? result.task : t)));
+      setStats((prev) => prev.map((s) => (s.stat === result.stat.stat ? result.stat : s)));
+
+      setMessage(`+${result.xpGained} ${result.stat.stat} XP!`);
+    } catch (err) {
+      setMessage((err as Error).message);
+    }
+  }
 
   return (
-      <main>
-        <h1>Today's Anchors</h1>
-        <ul>
-          {tasks.map((task) => (
-              <li key={task.id}>
-                [{task.stat}] {task.title} ({task.baseXp} XP) {task.status === 'COMPLETED' ? '✓' : ''}
-              </li>
-          ))}
-        </ul>
-      </main>
+    <main style={{ padding: 24 }}>
+      <h2>Stats</h2>
+      {stats.map((s) => (
+        <StatBar key={s.stat} progress={s} />
+      ))}
+
+      <h2>Today's Anchors</h2>
+      <ul>
+        {tasks.map((task) => (
+          <TaskItem key={task.id} task={task} onComplete={handleComplete} />
+        ))}
+      </ul>
+
+      {message && <p>{message}</p>}
+    </main>
   );
 }

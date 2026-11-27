@@ -7,6 +7,7 @@ import { TaskItem } from './components/TaskItem';
 import { AddTaskForm } from './components/AddTaskForm';
 import { SoloLog } from './components/SoloLog';
 import { FocusTimer } from './components/FocusTimer';
+import { ExpenseTracker } from './components/ExpenseTracker';
 
 const USER_ID = 15;
 
@@ -98,6 +99,8 @@ export default function App() {
       </section>
 
       <SoloLog userId={USER_ID} onMessage={setMessage} />
+      <ExpenseTracker userId={USER_ID} onMessage={setMessage} />
+      
 
       <FocusTimer
         userId={USER_ID}

@@ -1,6 +1,8 @@
 import type {
   CompleteTaskResponse,
+  CreateExpenseRequest,
   CreateTaskRequest,
+  Expense,
   FinishFocusResponse,
   FocusSession,
   LogEntry,
@@ -87,5 +89,17 @@ export function startFocus(userId: number, taskId: number | null, plannedMinutes
 export function finishFocus(userId: number, sessionId: number) {
   return request<FinishFocusResponse>(`/api/users/${userId}/focus/${sessionId}/finish`, {
     method: 'POST',
+  });
+}
+
+export function getExpenses(userId: number) {
+  return request<Expense[]>(`/api/users/${userId}/expenses`);
+}
+
+export function createExpense(userId: number, req: CreateExpenseRequest) {
+  return request<Expense>(`/api/users/${userId}/expenses`, {
+    method: 'POST',
+    headers: JSON_HEADERS,
+    body: JSON.stringify(req),
   });
 }

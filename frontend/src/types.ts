@@ -63,3 +63,44 @@ export type FinishFocusResponse = {
   session: FocusSession;
   stat: StatProgress | null;
 };
+
+export type ExpenseCategory =
+  | 'FOOD'
+  | 'GROCERIES'
+  | 'TRANSPORTATION'
+  | 'HOUSING'
+  | 'BILLS'
+  | 'SHOPPING'
+  | 'FUN'
+  | 'HEALTH'
+  | 'OTHER';
+
+export const EXPENSE_CATEGORIES: ExpenseCategory[] = [
+  'FOOD',
+  'GROCERIES',
+  'TRANSPORTATION',
+  'HOUSING',
+  'BILLS',
+  'SHOPPING',
+  'FUN',
+  'HEALTH',
+  'OTHER',
+];
+
+export type Expense = {
+  id: number;
+  amountCents: number;
+  merchant: string;
+  category: ExpenseCategory;
+  spentOn: string;
+  note: string | null;
+  createdAt: string;
+};
+
+export type CreateExpenseRequest = {
+  amountCents: number;
+  merchant: string;
+  category: ExpenseCategory;
+  spentOn: string;
+  note: string | null;
+};

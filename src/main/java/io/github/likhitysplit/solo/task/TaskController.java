@@ -47,4 +47,10 @@ public class TaskController {
                                          @PathVariable Long taskId) {
         return CompleteTaskResponse.from(taskService.completeTask(userId, taskId));
     }
+
+    @PostMapping("/rollover")
+    public RolloverResult rollOver(@PathVariable Long userId,
+                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return taskService.rollOver(userId, date);
+    }
 }

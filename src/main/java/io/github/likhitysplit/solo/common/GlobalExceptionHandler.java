@@ -1,5 +1,7 @@
 package io.github.likhitysplit.solo.common;
 
+import io.github.likhitysplit.solo.focus.FocusConflictException;
+import io.github.likhitysplit.solo.focus.FocusSessionNotFoundException;
 import io.github.likhitysplit.solo.task.AnchorLimitExceededException;
 import io.github.likhitysplit.solo.task.TaskAlreadyCompletedException;
 import io.github.likhitysplit.solo.task.TaskNotFoundException;
@@ -41,6 +43,28 @@ public class GlobalExceptionHandler {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.CONFLICT, ex.getMessage());
         problem.setTitle("task already completed");
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidInputException.class)
+    public ProblemDetail handleInvalidInput(InvalidInputException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST, ex.getMessage());
+        problem.setTitle("invalid input");
+        return problem;
+    }
+
+    @ExceptionHandler(FocusConflictException.class)
+    public ProblemDetail handleFocusConflict(FocusConflictException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        problem.setTitle("Focus conflict");
+        return problem;
+    }
+
+    @ExceptionHandler(FocusSessionNotFoundException.class)
+    public ProblemDetail handleFocusNotFound(FocusSessionNotFoundException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problem.setTitle("Focus session not found");
         return problem;
     }
 }

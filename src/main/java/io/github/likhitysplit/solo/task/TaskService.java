@@ -63,4 +63,26 @@ public class TaskService {
 
         return new TaskCompletion(task, progress, xp);
     }
+
+    @Transactional
+    public RolloverResult rollOver(Long userId, LocalDate today) {
+        List<Task> unfinished = tasks.findUnfinishedBefore(userId, TaskStatus.OPEN, today);
+
+        long anchorsToday = tasks.countByUserIdAndScheduledDateAndType(userId, today, TaskType.ANCHOR);
+        long freeSlots = Math.max(0, MAX_ANCHORS_PER_DAY - anchorsToday);
+        int demoted = 0;
+
+        for (Task task : unfinished) {
+            task.rollOverTo(today);
+            if (task.getType() == TaskType.ANCHOR) {
+                if (freeSlots > 0) {
+                    freeSlots--;
+                } else {
+                    task.demoteToExtra();
+                    demoted++;
+                }
+            }
+        }
+        return new RolloverResult(unfinished.size(), demoted);
+    }
 }

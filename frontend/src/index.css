@@ -1,0 +1,225 @@
+/* ============ Palette ============ */
+:root {
+  --bg: #000000;
+  --border: #ffffff;
+  --text: #ffffff;
+  --text-dim: #9a9a9a;
+  --accent: #ffd23f;   /* yellow */
+  --danger: #ff5c5c;
+}
+
+/* ============ Base ============ */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'VT323', monospace;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 26px;
+  font-weight: normal;
+  color: var(--accent);
+}
+
+/* ============ Layout ============ */
+.dashboard {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 700px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+.window {
+  border: 2px solid var(--border);
+  padding: 16px;
+}
+
+.window--wide {
+  grid-column: 1 / -1;
+}
+
+.section-label {
+  margin: 12px 0 4px;
+  font-size: 20px;
+  color: var(--text-dim);
+}
+
+/* ============ Stats ============ */
+.stat {
+  margin-bottom: 12px;
+}
+
+.stat__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat__name {
+  color: var(--text);
+}
+
+.stat__level {
+  color: var(--accent);
+}
+
+.stat__xp {
+  font-size: 18px;
+  color: var(--text-dim);
+}
+
+.xp-bar {
+  height: 14px;
+  border: 2px solid var(--border);
+}
+
+.xp-bar__fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s;
+}
+
+/* ============ Tasks ============ */
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.task__stat {
+  min-width: 40px;
+  color: var(--text-dim);
+}
+
+.task__title {
+  flex: 1;
+}
+
+.task__xp {
+  color: var(--text-dim);
+}
+
+.task--done {
+  color: var(--text-dim);
+}
+
+.task--done .task__title {
+  text-decoration: line-through;
+}
+
+.task__check,
+.task__rolled {
+  color: var(--accent);
+}
+
+/* ============ Buttons & inputs ============ */
+.pixel-button {
+  font-family: inherit;
+  font-size: 20px;
+  color: #000;
+  background: var(--accent);
+  border: 2px solid var(--accent);
+  padding: 2px 10px;
+  cursor: pointer;
+}
+
+.pixel-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.pixel-input {
+  font-family: inherit;
+  font-size: 20px;
+  color: var(--text);
+  background: #000;
+  border: 2px solid var(--text-dim);
+  padding: 4px 8px;
+}
+
+.pixel-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.pixel-input--xp {
+  width: 64px;
+}
+
+textarea.pixel-input {
+  width: 100%;
+  min-height: 70px;
+  resize: vertical;
+}
+
+.add-task {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.add-task__title {
+  flex: 1 1 100%;
+}
+
+/* ============ Solo Log ============ */
+.log-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.log-entry {
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--text-dim);
+}
+
+.log-entry__meta {
+  font-size: 18px;
+  color: var(--text-dim);
+}
+
+/* ============ Handoff ============ */
+.handoff__from-past {
+  margin: 0 0 12px;
+  color: var(--accent);
+  white-space: pre-wrap;
+}
+
+/* ============ Focus timer (Chunk 23) ============ */
+.focus__clock {
+  font-size: 56px;
+  color: var(--accent);
+  margin: 4px 0 8px;
+}
+
+/* ============ Dialog ============ */
+.dialog {
+  min-height: 52px;
+}

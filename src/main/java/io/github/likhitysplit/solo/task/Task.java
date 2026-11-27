@@ -67,6 +67,20 @@ public class Task {
         this.completedAt = now;
     }
 
+    public void rollOverTo(LocalDate date) {
+        if (status == TaskStatus.COMPLETED) {
+            throw new TaskAlreadyCompletedException(id);
+        }
+        if (!date.isAfter(scheduledDate)) {
+            throw new IllegalArgumentException("can only roll a task forward in time");
+        }
+        this.scheduledDate = date;
+    }
+
+    public void demoteToExtra() {
+        this.type = TaskType.EXTRA;
+    }
+
     public Long getId() {
         return id;
     }

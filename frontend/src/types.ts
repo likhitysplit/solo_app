@@ -116,3 +116,39 @@ type Props = {
   me: Me;
   onLoggedOut: () => void;
 };
+
+export type BudgetPeriod = 'WEEKLY' | 'MONTHLY';
+
+export type BudgetStatus = {
+  category: ExpenseCategory;
+  period: BudgetPeriod;
+  limitCents: number;
+  spentCents: number;
+  periodStart: string;
+  periodEnd: string;
+  daysLeft: number;
+};
+
+export type BudgetResponse = {
+  category: ExpenseCategory;
+  period: BudgetPeriod;
+  limitCents: number;
+  effectiveFrom: string;
+};
+
+export type BudgetResult = {
+  period: BudgetPeriod;
+  periodStart: string;
+  periodEnd: string;
+  qualified: boolean;
+  categoriesMet: number;
+  categoriesTotal: number;
+  xpAwarded: number;
+};
+
+export type ReceiptDraft = {
+  amountCents: number | null;
+  merchant: string | null;
+  category: ExpenseCategory;  
+  spentOn: string;       
+};

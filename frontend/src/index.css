@@ -280,3 +280,22 @@ textarea.pixel-input {
   align-items: center;
   color: var(--text-dim);
 }
+
+/* ============ Budgets ============ */
+.xp-bar__fill--over {
+  background: var(--danger);
+}
+
+.budget--over {
+  color: var(--danger);
+}
+
+.pixel-button--disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+label.pixel-button {
+  display: inline-block;
+  margin-bottom: 8px;
+}

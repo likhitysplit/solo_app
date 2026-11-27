@@ -8,6 +8,7 @@ import { AddTaskForm } from './components/AddTaskForm';
 import { SoloLog } from './components/SoloLog';
 import { FocusTimer } from './components/FocusTimer';
 import { ExpenseTracker } from './components/ExpenseTracker';
+import { BudgetPanel } from './components/BudgetPanel';
 
 type Props = {
   me: Me;
@@ -18,6 +19,7 @@ export function Dashboard({ me, onLoggedOut }: Props) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [stats, setStats] = useState<StatProgress[]>([]);
   const [message, setMessage] = useState<string | null>(null);
+  const [expensesVersion, setExpensesVersion] = useState(0);
 
   useEffect(() => {
     async function load() {
@@ -64,6 +66,12 @@ export function Dashboard({ me, onLoggedOut }: Props) {
     setStats((prev) => prev.map((s) => (s.stat === stat.stat ? stat : s)));
   }
 
+  function refreshStats() {
+    getStats()
+      .then(setStats)
+      .catch((err) => setMessage(err.message));
+  }
+
   const anchors = tasks.filter((t) => t.type === 'ANCHOR');
   const extras = tasks.filter((t) => t.type === 'EXTRA');
   const openTasks = tasks.filter((t) => t.status === 'OPEN');
@@ -105,7 +113,17 @@ export function Dashboard({ me, onLoggedOut }: Props) {
       </section>
 
       <SoloLog onMessage={setMessage} />
-      <ExpenseTracker onMessage={setMessage} />
+
+      <ExpenseTracker
+        onMessage={setMessage}
+        onLogged={() => setExpensesVersion((v) => v + 1)}
+      />
+
+      <BudgetPanel
+        refreshKey={expensesVersion}
+        onMessage={setMessage}
+        onXpAwarded={refreshStats}
+      />
 
       <FocusTimer
         openTasks={openTasks}

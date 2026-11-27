@@ -1,8 +1,13 @@
 import type {
+    BudgetPeriod,
+    BudgetResponse,
+    BudgetResult,
+    BudgetStatus,
   CompleteTaskResponse,
   CreateExpenseRequest,
   CreateTaskRequest,
   Expense,
+  ExpenseCategory,
   FinishFocusResponse,
   FocusSession,
   LogEntry,
@@ -126,4 +131,22 @@ export function login(email: string, password: string) {
 
 export function logout() {
   return request<null>('/api/auth/logout', { method: 'POST' });
+}
+
+// ---------- Budgets ----------
+
+export function getBudgetSummary() {
+  return request<BudgetStatus[]>('/api/budgets/summary');
+}
+
+export function setBudget(category: ExpenseCategory, period: BudgetPeriod, limitCents: number) {
+  return request<BudgetResponse>(`/api/budgets/${category}`, {
+    method: 'PUT',
+    headers: JSON_HEADERS,
+    body: JSON.stringify({ period, limitCents }),
+  });
+}
+
+export function closeBudgetPeriods() {
+  return request<BudgetResult[]>('/api/budgets/close', { method: 'POST' });
 }

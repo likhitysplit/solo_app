@@ -23,11 +23,11 @@ export function FocusTimer({openTasks, onStatUpdated, onMessage }: Props) {
   const [minutes, setMinutes] = useState(25);
   const [now, setNow] = useState(Date.now());
 
-  useEffect(() => {
+    useEffect(() => {
     getActiveFocus()
       .then(setActive)
       .catch((err) => onMessage(err.message));
-  });
+  }, []);
 
   useEffect(() => {
     if (!active) return;

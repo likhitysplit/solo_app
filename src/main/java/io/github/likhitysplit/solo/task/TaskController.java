@@ -3,6 +3,7 @@ package io.github.likhitysplit.solo.task;
 import io.github.likhitysplit.solo.task.dto.CompleteTaskResponse;
 import io.github.likhitysplit.solo.task.dto.CreateTaskRequest;
 import io.github.likhitysplit.solo.task.dto.TaskResponse;
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class TaskController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TaskResponse create(@PathVariable Long userId,
-                               @RequestBody CreateTaskRequest req) {
+                               @Valid @RequestBody CreateTaskRequest req) {
         Task task = taskService.createTask(
                 userId, req.title(), req.type(), req.stat(), req.baseXp(), req.date());
         return TaskResponse.from(task);

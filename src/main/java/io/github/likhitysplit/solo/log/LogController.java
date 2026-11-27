@@ -2,6 +2,7 @@ package io.github.likhitysplit.solo.log;
 
 import io.github.likhitysplit.solo.log.dto.CreateLogRequest;
 import io.github.likhitysplit.solo.log.dto.LogEntryResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class LogController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LogEntryResponse create(@PathVariable Long userId, @RequestBody CreateLogRequest req) {
+    public LogEntryResponse create(@PathVariable Long userId, @Valid @RequestBody CreateLogRequest req) {
         return LogEntryResponse.from(logService.createEntry(userId, req.content(), req.tag()));
     }
 
